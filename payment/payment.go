@@ -25,7 +25,11 @@ type Result struct {
 // Run prompts the user per ledger and dispatches the browser flow for each
 // chosen ledger. Outstanding bills are summed per ledger before asking — the
 // payment-una-tantum page accepts a single amount per ledger.
-func Run(ctx context.Context, cfg config.Config, accountNumber string, outstanding []report.DueLine, screenshotDir string) []Result {
+//
+// When unattended is true, the per-ledger confirmation prompt is skipped and
+// every outstanding ledger is paid. Used by the recurring binary, which has
+// pre-authorized payment via setup.
+func Run(ctx context.Context, cfg config.Config, accountNumber string, outstanding []report.DueLine, screenshotDir string, unattended bool) []Result {
 	groups := groupByLedger(outstanding)
 	if len(groups) == 0 {
 		return nil
@@ -48,7 +52,7 @@ func Run(ctx context.Context, cfg config.Config, accountNumber string, outstandi
 		}
 		processed[ledger] = true
 
-		if !confirmPayment(reader, ledger, amount, "") {
+		if !unattended && !confirmPayment(reader, ledger, amount, "") {
 			results = append(results, Result{Ledger: ledger, Status: "skipped", Amount: amount})
 			continue
 		}

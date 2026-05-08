@@ -40,7 +40,7 @@ e sicurezza*.
 ## 🛠️ Utilizzo
 
 Apri il binario nella cartella in cui l'hai messo. Al primo avvio ti chiede email, password e (opzionale) la carta di
-credito + giorno di chiusura, usato per calcolare il momento ottimale di pagamento.
+credito + giorno di chiusura dell'estratto conto, usato per calcolare il momento ottimale di pagamento.
 
 Senza opzioni stampa il report e salva PDF + CSV + `.ics`. Le opzioni disponibili:
 
@@ -56,6 +56,32 @@ Tutti i file (config, bollette, indice, calendario) vengono salvati **nella stes
 - 📄 PDF originali delle bollette
 - 📊 `invoices.csv` — indice tabellare
 - 📆 `payments.ics` — promemoria scadenze (+ giorno-dopo-cutoff se hai impostato la carta)
+
+## ⏰ Esecuzione automatica (opzionale, **non testata**)
+
+> ⚠️ **Disclaimer**: questa parte non è stata testata sul campo. Onestamente, è più semplice lanciare il binario
+> normale ogni tanto quando arriva la mail "nuova bolletta disponibile" nella mail — un click in più ma zero rischio di
+> launchd / systemd / Task Scheduler che si comportano in modo strano. Considerala una feature sperimentale: il codice
+> compila, l'install si scrive, ma l'end-to-end (login → kickstart → pagamento → notifica) non l'ho mai osservato girare
+> davvero. Se la provi e qualcosa esplode, apri una issue.
+
+Esiste un secondo eseguibile, `octopus-autopay-recurring`, che si registra come trigger di sistema e parte da solo: ad
+ogni login + ogni ~6h mentre sei loggato, controlla le bollette aperte e — se lo schermo è sbloccato — apre il browser e
+paga. Notifiche desktop su quattro eventi: scansione fallita, nuove bollette rilevate, pagamento andato a buon fine,
+pagamento fallito. Silenzio quando non c'è nulla da fare.
+
+| Sistema                                      | File da scaricare                             |
+|----------------------------------------------|-----------------------------------------------|
+| 🍎 **macOS** (Apple Silicon / M1, M2, M3, …) | `octopus-autopay-recurring-darwin-arm64`      |
+| 🍎 **macOS** (Intel)                         | `octopus-autopay-recurring-darwin-amd64`      |
+| 🐧 **Linux** (AMD64)                         | `octopus-autopay-recurring-linux-amd64`       |
+| 🐧 **Linux** (Raspberry Pi / ARM)            | `octopus-autopay-recurring-linux-arm64`       |
+| 🪟 **Windows**                               | `octopus-autopay-recurring-windows-amd64.exe` |
+
+Mettilo dove vuoi tenerlo (lo scheduler del sistema lo richiama da quel path), poi lancialo una volta dal terminale: ti
+chiede di confermare l'attivazione e si auto-installa con `launchctl` su macOS, `systemctl --user` su Linux, `schtasks`
+su Windows. Per disattivare: `octopus-autopay-recurring -uninstall`. Richiede che `octopus-autopay` sia già configurato
+con autopay + carta.
 
 ## 📣 Condividi
 
@@ -78,4 +104,5 @@ Trovato utile? Spargi la voce 👇
 
 ## 🐙 Ending
 
-Dopotutto, siamo tutti un po' utenti di IPF dentro, questo tool è solo un'aggiunta.
+Dopotutto, siamo tutti un po' utenti di IPF dentro, questo tool è solo un'aggiunta.  
+E sì, è sloppato.

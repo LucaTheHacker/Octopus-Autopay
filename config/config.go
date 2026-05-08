@@ -22,8 +22,16 @@ type Config struct {
 	// AutoPay, when true, makes the CLI ask interactively whether to pay any
 	// outstanding bills at the end of each run. Set during first-run setup;
 	// can be toggled later by hand-editing octopus-autopay.json.
-	AutoPay bool         `json:"auto_pay,omitempty"`
-	Card    *CardDetails `json:"card,omitempty"`
+	AutoPay  bool            `json:"auto_pay,omitempty"`
+	Card     *CardDetails    `json:"card,omitempty"`
+	Schedule *ScheduleConfig `json:"schedule,omitempty"`
+}
+
+// ScheduleConfig records whether the recurring binary has installed itself as
+// an OS-native login trigger. Only the recurring binary writes this; the
+// run-once binary ignores it.
+type ScheduleConfig struct {
+	Enabled bool `json:"enabled"`
 }
 
 // CardDetails are saved alongside credentials when the user opts into autopay.
@@ -157,6 +165,23 @@ func LoadOrPrompt() (Config, error) {
 	}
 	fmt.Fprintf(os.Stderr, "Saved credentials to %s\n", path)
 	return cfg, nil
+}
+
+// Save persists cfg to the canonical path. Use it after mutating fields like
+// Schedule outside the first-time prompt flow.
+func Save(cfg Config) error {
+	path, err := Path()
+	if err != nil {
+		return err
+	}
+	return write(path, cfg)
+}
+
+// PromptSchedule asks the user whether to enable the OS-native recurring
+// trigger. Returns true on yes/sì, false otherwise.
+func PromptSchedule() (bool, error) {
+	r := bufio.NewReader(os.Stdin)
+	return promptYesNo(r, "Abilitare l'esecuzione automatica al login (e ogni ~6h mentre sei loggato)? [y/N]: ")
 }
 
 func read(path string) (Config, error) {
