@@ -1,5 +1,7 @@
 # 🐙 Octopus Autopay
 
+![Cover](.github/OctopusAutopayCover.png)
+
 **Paga le bollette Octopus Energy in automatico, al momento giusto, con la tua carta preferita.**
 
 ---

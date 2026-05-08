@@ -31,7 +31,6 @@ builder-data/*
 **/*.txt
 **/*.html
 **/*.http
-**/*.png
 
 octopus-autopay
 octopus-autopay.json
