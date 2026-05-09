@@ -22,6 +22,13 @@ retribuiti, e mi scoccia anche scordarmi di doverle pagare.
 - Il sistema è autoinstallante, arriva già pronto e scarica autonomamente quanto necessario, ovvero un browser per
   bypassare le protezioni anti-bot di Stripe / Octopus / whatever per pagare
 
+## 🚨 REQUISITI
+
+Per usufruire del sistema è necessario avere la preferenza di pagamento su Octopus con PagoPA. 
+Se attualmente è attiva la domiciliazione bancaria (SDD) è necessario contattare il supporto Octopus e chiedere di cambiare metodo di pagamento.
+
+[Comodo link per richiedere in automatico.](https://api.whatsapp.com/send?phone=390238582776&text=Buongiorno%2C%20vorrei%20cambiare%20il%20metodo%20di%20pagamento%20della%20mia%20fornitura%20a%20PagoPA%2C%20invece%20che%20con%20la%20domiciliazione%20bancaria.%20%0A%0ABuona%20giornata!)
+
 ## 🚀 Installazione
 
 Vai alla [pagina Releases](https://github.com/lucathehacker/octopus-autopay/releases/latest) e scarica il file giusto
